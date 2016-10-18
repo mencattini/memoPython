@@ -73,7 +73,9 @@ plt.ylabel("valeur $y$")
 plt.title("Exemple avec $m_{ij} \in [0,1[ \ \forall i,j$")
 plt.show()
 ```
+
 Donne :
+
 ![exemple 1.1](figures/exemple1.1.png)
 
 
