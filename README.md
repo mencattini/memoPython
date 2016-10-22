@@ -167,14 +167,19 @@ g++ -o libnormcpp.so norm.cpp -fPIC -shared
 ```
 # première ligne, on charge la lib
 lib = ctypes.cdll.LoadLibrary('./libnormcpp.so')
+
 # on définit les arguments de la fonction norm contenue dans lib
 lib.norm.argtypes = [ndpointer(ctypes.c_float, flags="C_CONTIGUOUS"), ctypes.c_int, ndpointer(ctypes.c_float)]
+
 # on change le type de la solution pour qu'elle corresponde à la ligne du dessus
 sol = np.array(solution, dtype=np.float32)
+
 # on définit un accumulateur qui sera passé par référence
 i = np.array(0, dtype=np.float32)
+
 # on appelle la fonction avec la pramètres
 lib.norm(sol, len(solution), i)
+
 # on retourne le resultat
 return i
 ```
