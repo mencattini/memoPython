@@ -133,3 +133,48 @@ Voici un exemple de sortie:
     26                                               # we return this three numbers
     27         3            3      1.0      0.1      return [number_positive, number_negative, total]
 
+## Appeler des fonctions en C/C++
+
+1) En premier lieu, il faudra écrire vos fonctions `C/C++`, dans une librairie. Exemple de lib:
+
+```
+#include <iostream>
+#include <vector>
+#include <tgmath.h>
+
+using namespace std;
+
+extern "C" {
+	void norm(const float* array, int len, float *res){
+		int n = 2*len;
+		*res = 0.0;
+		for(int i=2; i < n; i+= 2){
+			*res += sqrt(pow(array[i-2] - array[i],2) + pow(array[i-1]-array[i+1],2));	
+		}
+		*res += sqrt(pow(array[n-2] - array[0],2) + pow(array[n-1]-array[1],2));	
+	}
+}
+```
+
+Cette fonction est contenue dans `norm.cpp`.
+
+2) Compilation de la lib:
+```
+g++ -o libnormcpp.so norm.cpp -fPIC -shared
+```
+
+3) Code Python pour l'appeler:
+```
+# première ligne, on charge la lib
+lib = ctypes.cdll.LoadLibrary('./libnormcpp.so')
+# on définit les arguments de la fonction norm contenue dans lib
+lib.norm.argtypes = [ndpointer(ctypes.c_float, flags="C_CONTIGUOUS"), ctypes.c_int, ndpointer(ctypes.c_float)]
+# on change le type de la solution pour qu'elle corresponde à la ligne du dessus
+sol = np.array(solution, dtype=np.float32)
+# on définit un accumulateur qui sera passé par référence
+i = np.array(0, dtype=np.float32)
+# on appelle la fonction avec la pramètres
+lib.norm(sol, len(solution), i)
+# on retourne le resultat
+return i
+```
