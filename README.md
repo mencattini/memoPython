@@ -1,6 +1,6 @@
-# Mémo Python
+## Mémo Python
 
-## IPython
+### IPython
 Utilisation de ```pylab```:
 ```
 ipython3 --pylab
@@ -27,7 +27,7 @@ y = 'fol'
 ```
 On remarque que la deuxième solution est en moyenne meilleure.
 
-## Numpy
+### Numpy
 Somme d'un tableau de booléen:
 ```
 tab = [True, True, True, False, True, False]
@@ -79,7 +79,7 @@ Donne :
 ![exemple 1.1](figures/exemple1.1.png)
 
 
-## Performances
+### Performances
 Pour concaténer des ```string```:
 ```
 strings = [str(ele) for ele in ["hello", " world", " my", " my", " name", " is", " Romain"]
@@ -133,7 +133,16 @@ Voici un exemple de sortie:
     26                                               # we return this three numbers
     27         3            3      1.0      0.1      return [number_positive, number_negative, total]
 
-## Appeler des fonctions en C/C++
+Il est intéressant d'éviter l'appel de méthode lors de boucle. Pour éviter ce point on peut:
+```
+upper = str.upper
+newlist = []
+append = newlist.append
+for word in oldlist:
+    append(upper(word))
+```
+
+### Appeler des fonctions en C/C++
 
 1) En premier lieu, il faudra écrire vos fonctions `C/C++`, dans une librairie. Exemple de lib:
 
@@ -185,3 +194,10 @@ return i
 ```
 
 Il n'est pas possible de changer le tableau _numpy_ en un double pointeur.
+
+### Lien
+[PythonSpeed/PerformanceTips](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) -> pour tout ce qui concerne les aspects de performances.
+[Documentation _ctypes_](https://docs.python.org/3/library/ctypes.html) -> pour inclure du code `C/C++`.
+[Documentation _cProfile_](https://docs.python.org/3/library/profile.html) -> pour profiler le programme.
+[Blog pour _Line Profiler_](https://zapier.com/engineering/profiling-python-boss/) -> pour un profilage pour précis.
+**Analyse de données en Python** ,de Wes McKinney, -> pour l'utilisation de _Panda_, _Numpy_, _Matplotlib_ et _IPython_.
