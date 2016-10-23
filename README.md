@@ -184,8 +184,4 @@ lib.norm(sol, len(solution), i)
 return i
 ```
 
-Pour avoir un tableau multi-dimensionnels:
-```
-lib.norm.argtypes = [ndpointer(ctypes.c_float, ndim=2, flags="C_CONTIGUOUS"), ctypes.c_int, ndpointer(ctypes.c_float)]
-```
-$ndim = n$ où $n \in \mathbb{N}$ et représente le nombre de dimension.
+Il n'est pas possible de changer le tableau _numpy_ en un double pointeur.
