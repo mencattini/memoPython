@@ -59,7 +59,7 @@ np.where(array > 0.5, 1, array)
 ```
 
 
-## Matplotlib
+### Matplotlib
 On peut ajouter du code **Latex** dans les axes et les légendes:
 ```
 import matplotlib.pyplot as plt
@@ -106,6 +106,24 @@ for key in dictionnary:
 ```
 
 Profiler son code:
+- ajouter dans son fichier ```import cProfile```
+- lancer le script avec ```python3 -m cProfile tp3.py | grep "tp3.py" > cProfile.txt```
+
+Voici un exemple de fichier:
+
+```
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+
+    53804    7.758    0.000    7.765    0.000 tp3.py:25(energie)
+        1    0.000    0.000    8.507    8.507 tp3.py:4(<module>)
+        2    0.000    0.000    0.000    0.000 tp3.py:41(generation_solution)
+    26952    0.129    0.000    0.444    0.000 tp3.py:49(generation_voisins)
+        1    0.000    0.000    0.018    0.018 tp3.py:70(temperature_initiale)
+        1    0.000    0.000    0.001    0.001 tp3.py:9(chargement_villes)
+    26852    0.096    0.000    7.862    0.000 tp3.py:90(test_acceptation)
+```
+   
+Profiler une fonction:
 - il faut : ```pip3 line_profiler```
 - ajouter dans le fichier ```import line_profiler```
 - ajouter un décorateur ```@profile``` en dessus de la fonction à profiler
@@ -154,14 +172,15 @@ for word in oldlist:
 using namespace std;
 
 extern "C" {
-	void norm(const float* array, int len, float *res){
+	void norm(const float* array, int len){
 		int n = 2*len;
-		*res = 0.0;
+		flaot res = 0.0;
 		for(int i=2; i < n; i+= 2){
-			*res += sqrt(pow(array[i-2] - array[i],2) + pow(array[i-1]-array[i+1],2));	
+			res += sqrt(pow(array[i-2] - array[i],2) + pow(array[i-1]-array[i+1],2));	
 		}
-		*res += sqrt(pow(array[n-2] - array[0],2) + pow(array[n-1]-array[1],2));	
+		res += sqrt(pow(array[n-2] - array[0],2) + pow(array[n-1]-array[1],2));	
 	}
+	return res;
 }
 ```
 
@@ -178,26 +197,28 @@ g++ -o libnormcpp.so norm.cpp -fPIC -shared
 lib = ctypes.cdll.LoadLibrary('./libnormcpp.so')
 
 # on définit les arguments de la fonction norm contenue dans lib
-lib.norm.argtypes = [ndpointer(ctypes.c_float, flags="C_CONTIGUOUS"), ctypes.c_int, ndpointer(ctypes.c_float)]
+lib.norm.argtypes = [ndpointer(ctypes.c_float, flags="C_CONTIGUOUS"), ctypes.c_int]
+
+#valeure de retour 
+lib.norm.restype = ctypes.c_float
 
 # on change le type de la solution pour qu'elle corresponde à la ligne du dessus
 sol = np.array(solution, dtype=np.float32)
 
-# on définit un accumulateur qui sera passé par référence
-i = np.array(0, dtype=np.float32)
-
 # on appelle la fonction avec la pramètres
-lib.norm(sol, len(solution), i)
+return lib.norm(sol, len(solution))
 
-# on retourne le resultat
-return i
 ```
 
 Il n'est pas possible de changer le tableau _numpy_ en un double pointeur.
 
 ### Lien
 [PythonSpeed/PerformanceTips](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) -> pour tout ce qui concerne les aspects de performances.
+
 [Documentation _ctypes_](https://docs.python.org/3/library/ctypes.html) -> pour inclure du code `C/C++`.
+
 [Documentation _cProfile_](https://docs.python.org/3/library/profile.html) -> pour profiler le programme.
+
 [Blog pour _Line Profiler_](https://zapier.com/engineering/profiling-python-boss/) -> pour un profilage pour précis.
+
 **Analyse de données en Python** ,de Wes McKinney, -> pour l'utilisation de _Panda_, _Numpy_, _Matplotlib_ et _IPython_.
