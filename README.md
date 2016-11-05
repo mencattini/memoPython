@@ -2,22 +2,22 @@
 
 ### IPython
 Utilisation de ```pylab```:
-```
+```bash
 ipython3 --pylab
 ```
 
 Lancement d'un script depuis le shell:
-```
+```python
 In [1]: %run mon_script.py
 ```
 
 Recharger une lib après l'avoir modifier:
-```
+```python
 reload(my_lib)
 ```
 
 Calculer le temps d'exécution d'une instruction:
-```
+```python
 x = 'folder'
 y = 'fol'
 
@@ -29,19 +29,19 @@ On remarque que la deuxième solution est en moyenne meilleure.
 
 ### Numpy
 Somme d'un tableau de booléen:
-```
+```python
 tab = [True, True, True, False, True, False]
 np.sum(tab) # = 4
 ```
 
 Change le type d'un ```array``` si possible:
-```
+```python
 array = np.array(["4.5","3.4","3"]) # 	= array(['4.5', '3.4', '3'], dtype='<U3')
 array.astype(np.float64) # 				= array([ 4.5,  3.4,  3. ])
 ```
 
 Utilisation de condition avec ```np.where```
-```
+```python
 array = np.random.rand(3,3)
 #array([[ 0.71406375,  0.74411441,  0.16653242],
 #     	[ 0.56306589,  0.14198397,  0.4568308 ],
@@ -61,7 +61,7 @@ np.where(array > 0.5, 1, array)
 
 ### Matplotlib
 On peut ajouter du code **Latex** dans les axes et les légendes:
-```
+```python
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -81,13 +81,13 @@ Donne :
 
 ### Performances
 Pour concaténer des ```string```:
-```
+```python
 strings = [str(ele) for ele in ["hello", " world", " my", " my", " name", " is", " Romain"]
 res = "".join(strings) # res = "hello my my name is Romain"
 ```
 
 Utilisations de ```Counter``` pour compter des mots, avec réutilisation de ``res``:
-```
+```python
 from collections import Counter
 import re
 
@@ -96,7 +96,7 @@ dict = Counter(re.findall('\w+', strings))
 ```
 
 Boucle création  et compte d'un dictionnaire:
-```
+```python
 for key in dictionnary:
 #try except if more fast than if-then
 	try:
@@ -152,7 +152,7 @@ Voici un exemple de sortie:
     27         3            3      1.0      0.1      return [number_positive, number_negative, total]
 
 Il est intéressant d'éviter l'appel de méthode lors de boucle. Pour éviter ce point on peut:
-```
+```python
 upper = str.upper
 newlist = []
 append = newlist.append
@@ -164,7 +164,7 @@ for word in oldlist:
 
 1) En premier lieu, il faudra écrire vos fonctions `C/C++`, dans une librairie. Exemple de lib:
 
-```
+```Cpp
 #include <iostream>
 #include <vector>
 #include <tgmath.h>
@@ -187,12 +187,12 @@ extern "C" {
 Cette fonction est contenue dans `norm.cpp`.
 
 2) Compilation de la lib:
-```
+```bash
 g++ -o libnormcpp.so norm.cpp -fPIC -shared
 ```
 
 3) Code Python pour l'appeler:
-```
+```python
 # première ligne, on charge la lib
 lib = ctypes.cdll.LoadLibrary('./libnormcpp.so')
 
