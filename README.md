@@ -125,7 +125,7 @@ ax.spines['left'].set_position('zero')
 ax.spines['bottom'].set_position('zero')
 plt.show()
 ```
-![exemple 1.1](figures/exemple1.2.png)
+![exemple 1.2](figures/exemple1.2.png)
 
 
 ### Performances
