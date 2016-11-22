@@ -110,6 +110,24 @@ Donne :
 ![exemple 1.1](figures/exemple1.1.png)
 
 
+Pour centrer les axes:
+```python
+t2 = np.arange(-6,0,0.1)
+t = np.arange(0,6,0.1)
+res = np.append(t2,t)
+
+fig, ax = plt.subplots()
+ax.grid()
+ax.plot(res,res)
+ax.axhline(y=0, color='k')
+ax.axvline(x=0, color='k')
+ax.spines['left'].set_position('zero')
+ax.spines['bottom'].set_position('zero')
+plt.show()
+```
+![exemple 1.1](figures/exemple1.2.png)
+
+
 ### Performances
 Pour concaténer des ```string```:
 ```python
