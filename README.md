@@ -58,6 +58,37 @@ np.where(array > 0.5, 1, array)
 #      [ 0.01144967,  0.24321215,  0.39831054]])
 ```
 
+### Panda
+Il est possible d'utiliser panda pour faire du traitement de donnés lourd.
+On peut charger un fichier :
+```
+1,2,3
+4,5,6
+7,8,9
+```
+s'appellant `data.dat`:
+```python
+data = pandas.read_csv("data.dat",header=None)
+#    0  1  2 
+# 0  1  2  3 
+# 1  4  5  6
+# 2  7  8  9 
+
+data[0][0] #=> 0
+data[2][2] #=> 9
+data[0] #=> 0    1
+#        => 1    4
+#        => 2    7
+# Name: 0, dtype: int64
+```
+Malheureusement cela ne semble par pratique, sauf si on applique:
+```python
+np.squeeze(np.matrix(data))
+#  matrix([[1,  2,  3 ],
+#  [4,  5,  6],
+#  [7,  8,  9]]) 
+```
+Qui est bien plus agréable, on utilise le ```np.squeeze```, pour virer les dimensions inutiles.
 
 ### Matplotlib
 On peut ajouter du code **Latex** dans les axes et les légendes:
