@@ -1,5 +1,63 @@
 ## Mémo Python
 
+### Python
+
+Le mot clé `yield` permet de construire un générateur.
+```python
+def gen(liste):
+	for ele in string:
+		yield ele
+```
+Qu'on peut utiliser:
+```python
+for ele in gen("foobar"):
+	print(ele)
+```
+
+En utilisant la syntaxe ```with```, on délègue la responsabilité de la fermeture du fichier. En effet, dès qu'on sort du bloc, la ressource est supprimée:
+```python
+
+with open("bla.dat", 'r') as f:
+	for line in f.readlines():
+		print(line)
+```
+On peut également créer sa propre classe à utiliser avec ```with```:
+```Python
+class foo:
+	
+	def __init__(self, attr1, attr2, attr3):
+		self.attr1 = attr1
+		self.attr2 = attr2
+		self.attr3 = attr3
+		
+	def __enter__(self):
+		self.attr1.open(self.attr2, self.attr3)
+	
+	def __exit__(self):
+		self.attr1.close()
+```
+La méthode ```__enter__``` est appellée en entrée du bloc ```with```. La méthode ```__exit__``` en sortie.
+
+Vu que les fonctions peuvent être passées comme attributs, il est possible de créer des décorateurs facilement:
+```python
+import time
+
+def timer(func):
+	t = time.process_time()
+	func()
+	print("Temps écoulé : " + str(time.process_time() - t))
+	
+@timer
+def slooooooow():
+	for ele in range(1000):
+		x = 1000
+		while(x > 0):
+			x -= 1
+
+slooooooow() 
+# => Temps écoulé : 0.09051611200000131
+```
+
 ### IPython
 Utilisation de ```pylab```:
 ```bash
@@ -144,6 +202,28 @@ dict = Counter(re.findall('\w+', strings))
 # dict = {"hello": 1, "world": 1, "my":2 ...
 ```
 
+Décorateur pour cacher les résultats; si le résultat d'un élément est déjà connu, il ne sera pas recalculé:
+```python
+@lru_cache(maxsize=32)
+def fac(x):
+	res = 1
+	for ele in range(x):
+		res *= ele
+	return res
+```
+On obtient :
+```python
+%time x = fact(40000)
+CPU times: user 708 ms, sys: 565 µs, total: 709 ms
+Wall time: 710 ms
+```
+puis:
+```
+%time x = fact(40000)
+CPU times: user 8 µs, sys: 1 µs, total: 9 µs
+Wall time: 13.6 µs
+```
+
 Boucle création  et compte d'un dictionnaire:
 ```python
 for key in dictionnary:
@@ -271,3 +351,5 @@ Il n'est pas possible de changer le tableau _numpy_ en un double pointeur.
 [Blog pour _Line Profiler_](https://zapier.com/engineering/profiling-python-boss/) -> pour un profilage pour précis.
 
 **Analyse de données en Python** ,de Wes McKinney, -> pour l'utilisation de _Panda_, _Numpy_, _Matplotlib_ et _IPython_.
+
+[PYTHON AVANCÉ ET FONCTIONS MÉCONNUES DU LANGAGE ](https://www.youtube.com/watch?v=p_dE8DD-oNs) -> vidéo intéressante sur Python.
