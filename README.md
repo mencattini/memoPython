@@ -139,14 +139,62 @@ data[0] #=> 0    1
 #        => 2    7
 # Name: 0, dtype: int64
 ```
-Malheureusement cela ne semble par pratique, sauf si on applique:
+
+Pour passer de temps en _[s]_ à une date:
 ```python
-np.squeeze(np.matrix(data))
-#  matrix([[1,  2,  3 ],
-#  [4,  5,  6],
-#  [7,  8,  9]]) 
+# read the csv
+data = pd.read_csv("EUR_USD-20120101-20120301_F.dat", delimiter=" ")
+# change the columns name
+data.columns = ["date", "bid", "ask"]
+# change second to date
+data["date"] = pd.to_datetime(data["date"], unit="s")
 ```
-Qui est bien plus agréable, on utilise le ```np.squeeze```, pour virer les dimensions inutiles.
+
+Pour compter par tranche de *15Min*:
+```python
+# count the 15Min
+res = pd.Series(1, data["date"]).resample('15Min').sum()
+# create the good dataframe
+tmp = pd.DataFrame({"date": res.keys(), "ticks": res.as_matrix()})
+# we replace nan by 0
+tmp.fillna(0)
+```
+
+Pour regrouper pour heure et minute (peut être étendu à d'autres choix):
+```python
+# we get the times to sum over hours/minutes/secondes
+times = pd.DatetimeIndex(res.date)
+grouped = res.groupby([times.hour, times.minute]).sum()
+# for week, day,hour, minute:
+grouped2 = res.groupby([times.week, times.day, times.hour, times.minute]).sum()
+```
+
+Pour diminer le nombre de _label_ présants sour le _DataFrame.plot(kind='bar')_, voici un code très utile:
+```python
+# voici les données que l'on veut ploter
+ax = grouped.plot('date', 'ticks', kind='bar', stacked=True, rot=90)
+# on génère la liste de _labels_ qui seront à ''Matplo
+tick = [''] * len(grouped['date'])
+# on définit le sous-ensemble que l'on veut prendre ici: tout les 5
+tick[::5] = [item for item in grouped['date'][::5]]
+# on utilise le formateur de matplotlib
+ax.xaxis.set_major_formatter(ticker.FixedFormatter(tick))
+# on formate les date
+plt.gcf().autofmt_xdate()
+# on tourne (ou non) les dates à la verticale
+pl.xticks(rotation=90)
+# on affiche
+plt.show()
+```
+
+Par rapport à un code classique qui donne:
+
+![bad dates](figures/bad_dates.png)
+
+On obtient:
+
+![good dates](figures/good_dates.png)
+
 
 ### Matplotlib
 On peut ajouter du code **Latex** dans les axes et les légendes:
@@ -185,6 +233,11 @@ plt.show()
 ```
 ![exemple 1.2](figures/exemple1.2.png)
 
+
+Pour éviter que les labels ne soient coupés:
+```python
+plt.tight_layout()
+```
 
 ### Performances
 Pour concaténer des ```string```:
