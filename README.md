@@ -342,6 +342,13 @@ for word in oldlist:
     append(upper(word))
 ```
 
+Pour éviter les objets, on peut utiliser des tuples nommés:
+```python
+from collections import namedtuple
+
+Joueur = namedtuple('Joueur', ['nom', 'age']))
+```
+
 ### Appeler des fonctions en C/C++
 
 1) En premier lieu, il faudra écrire vos fonctions `C/C++`, dans une librairie. Exemple de lib:
